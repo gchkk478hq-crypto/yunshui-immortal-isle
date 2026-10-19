@@ -1,0 +1,3 @@
+import {test} from 'node:test';import assert from 'node:assert/strict';import {WorldState} from '../src/world-state';
+test('night transition reversible, bounded, stable after completion',()=>{const w=new WorldState();w.toggleNight();for(let i=0;i<100;i++)w.tick(.05);assert.ok(Math.abs(w.night-.5)<1e-9);w.toggleNight();for(let i=0;i<110;i++)w.tick(.05);assert.equal(w.night,0);assert.equal(w.dayPhase,'day');w.toggleNight();for(let i=0;i<210;i++)w.tick(.05);assert.equal(w.night,1);assert.equal(w.dayPhase,'night')});
+test('hidden pauses simulation without accumulated delta',()=>{const w=new WorldState();w.toggleNight();w.hidden=true;w.tick(1000);assert.equal(w.time,0);assert.equal(w.night,0);w.hidden=false;w.tick(.016);assert.equal(w.time,.016);});
